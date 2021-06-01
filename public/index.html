@@ -1,11 +1,30 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <meta name="theme-color" content="#3063A0">
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600" rel="stylesheet">
+    <!-- End Google font -->
+    <!-- BEGIN PLUGINS STYLES -->
+    <link href="<%= BASE_URL %>css/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <!-- BEGIN THEME STYLES -->
+    <link href="<%= BASE_URL %>css/theme.min.css" rel="stylesheet" data-skin="default">
+    <link href="<%= BASE_URL %>css/theme-dark.min.css" rel="stylesheet" data-skin="dark">
+    <link href="<%= BASE_URL %>css/custom.css" rel="stylesheet">
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <script>
+      let skin = localStorage.getItem('skin') || 'default';
+      let disabledSkinStylesheet = document.querySelector('link[data-skin]:not([data-skin="' + skin + '"])');
+      // Disable unused skin immediately
+      disabledSkinStylesheet.setAttribute('rel', '');
+      disabledSkinStylesheet.setAttribute('disabled', true);
+      // add loading class to html immediately
+      document.querySelector('html').classList.add('loading');
+    </script>
   </head>
   <body>
     <noscript>
@@ -13,5 +32,27 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <!-- BEGIN BASE JS -->
+    <script src="<%= BASE_URL %>js/jquery/jquery.min.js"></script>
+    <script src="<%= BASE_URL %>js/bootstrap/popper.min.js"></script>
+    <script src="<%= BASE_URL %>js/bootstrap/bootstrap.min.js"></script>
+    <!-- END BASE JS -->
+    <!-- BEGIN PLUGINS JS -->
+    <script src="<%= BASE_URL %>js/particles.js"></script>
+    <script>
+      /**
+       * Keep in mind that your scripts may not always be executed after the theme is completely ready,
+       * you might need to observe the `theme:load` event to make sure your scripts are executed after the theme is ready.
+       */
+      $(document).on('theme:init', () =>
+      {
+        /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
+        particlesJS.load('auth-header', 'js/particles.json');
+      })
+    </script>
+    <!-- END PLUGINS JS -->
+    <!-- BEGIN THEME JS -->
+    <script src="<%= BASE_URL %>js/theme.js"></script>
+    <!-- END THEME JS -->
   </body>
 </html>
