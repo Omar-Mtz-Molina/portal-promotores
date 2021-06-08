@@ -30,21 +30,23 @@
         </svg>
         <span class="sr-only">Sign In</span>
       </h1>
-      <p>Don't have a account? <a href="auth-signup.html">Create One</a></p>
+      <!-- <p>Don't have a account? <a href="auth-signup.html">Create One</a></p> -->
     </header>
     <!-- form -->
-    <form class="auth-form">
+    <form class="auth-form" @submit.prevent="submit">
       <!-- .form-group -->
       <div class="form-group">
         <div class="form-label-group">
           <input
-            type="text"
-            id="inputUser"
+            type="email"
+            id="email"
+            v-model="form.email"
             class="form-control"
-            placeholder="Username"
+            placeholder="Email Address..."
+            required=""
             autofocus=""
           />
-          <label for="inputUser">Username</label>
+          <label for="email">Email Address...</label>
         </div>
       </div>
       <!-- /.form-group -->
@@ -53,18 +55,36 @@
         <div class="form-label-group">
           <input
             type="password"
-            id="inputPassword"
+            id="password"
+            v-model="form.password"
             class="form-control"
             placeholder="Password"
+            required=""
           />
-          <label for="inputPassword">Password</label>
+          <label for="password">Password</label>
         </div>
       </div>
       <!-- /.form-group -->
       <!-- .form-group -->
-      <div class="form-group">
+      <div class="form-group row">
+        <div class="col-12">
+          <vue-recaptcha
+            sitekey="6Lefo8kUAAAAANnsSS5MfvDnzzniSQ0f3Nfc6U_A"
+            @verify="onVerify"
+            @expired="onExpired"
+          ></vue-recaptcha>
+        </div>
+      </div>
+      <!-- /.form-group -->
+      <!-- .form-group -->
+      <!-- <div class="form-group">
         <button class="btn btn-lg btn-primary btn-block" type="submit">
           Sign In
+        </button>
+      </div> -->
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-user btn-block">
+          {{ procesando ? "Validando..." : "Ingresar" }}
         </button>
       </div>
       <!-- /.form-group -->
@@ -83,11 +103,11 @@
       </div>
       <!-- /.form-group -->
       <!-- recovery links -->
-      <div class="text-center pt-3">
+      <!-- <div class="text-center pt-3">
         <a href="auth-recovery-username.html" class="link">Forgot Username?</a>
         <span class="mx-2">·</span>
         <a href="auth-recovery-password.html" class="link">Forgot Password?</a>
-      </div>
+      </div> -->
       <!-- /recovery links -->
     </form>
     <!-- /.auth-form -->
@@ -101,8 +121,66 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import VueRecaptcha from "vue-recaptcha";
 export default {
   name: "SignIn",
-  components: {},
+  components: {
+    VueRecaptcha,
+  },
+  data() {
+    return {
+      procesando: false,
+      hasError: false,
+      recaptcha: null,
+      form: {
+        email: "",
+        password: "",
+      },
+    };
+  },
+  methods: {
+    ...mapActions({
+      signIn: "auth/signIn",
+    }),
+    onVerify: function (response) {
+      this.recaptcha = response;
+    },
+    onExpired: function () {
+      this.recaptcha = null;
+    },
+    submit() {
+      if (this.recaptcha != null) {
+        this.procesando = true;
+        this.signIn(this.form)
+          .then(() => {
+            alert("Success");
+            this.$router.replace({
+              name: "dashboard",
+            });
+          })
+          .catch(() => {
+            /* this.$toast.add({
+              severity: "error",
+              detail: "Usuario y/o contraseña incorrectos.",
+              closable: false,
+              life: 5000,
+            }); */
+            alert("Error");
+            this.procesando = false;
+            this.hasError = true;
+            this.form.password = null;
+          });
+      } else {
+        alert("El campo reCAPTCHA es obligatorio");
+        /* this.$toast.add({
+          severity: "error",
+          detail: "El campo reCAPTCHA es obligatorio",
+          closable: false,
+          life: 5000,
+        }); */
+      }
+    },
+  },
 };
 </script>

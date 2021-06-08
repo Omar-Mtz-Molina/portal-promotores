@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import SignIn from "../views/auth/SignIn.vue";
+import Dashboard from "../views/Dashboard.vue";
 
 Vue.use(VueRouter);
 
@@ -9,6 +10,11 @@ const routes = [
     path: "/",
     name: "SignIn",
     component: SignIn,
+  },
+  {
+    path: "/dashboard",
+    name: "dashboard",
+    component: Dashboard,
   },
   {
     path: "/about",
