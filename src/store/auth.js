@@ -61,8 +61,8 @@ export default {
           localStorage.setItem("token", token);
           localStorage.setItem("id", response.data.id);
         }
-        commit("SET_USER", response.data.info);
-        commit("SET_ROLE", response.data.info.role);
+        commit("SET_USER", response.data);
+        commit("SET_ROLE", response.data.role);
       } catch (e) {
         commit("SET_TOKEN", null);
         localStorage.removeItem("token");
