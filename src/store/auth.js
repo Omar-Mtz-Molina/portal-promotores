@@ -34,12 +34,7 @@ export default {
   actions: {
     async signIn({ dispatch }, credentials) {
       //localStorage.setItem("email", credentials.email);
-      let response = await axios.post("auth/login", credentials, {
-        /*headers: {
-          id: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOnsiaWQiOiIkMmIkMTUkc2MxRXZHajVqL2tuNGV2Q21oUkl5Ty8yd0UxZ29QUm5HREJqc2lSb2I5RHQzQzZCQ1pwMHUiLCJuYW1lIjoiQWRtaW4iLCJhZGRyZXNzIjoiTcOpeGljbyJ9LCJpYXQiOjE1OTMxODMxMTAsImV4cCI6MTU5NTc3NTExMH0.g1v27O31PqoFSvC8gLNbP1ZOxxUg6kzNQItBqDTznx0",
-          key: "$2b$10$gHAtQp/D9j1jMSxzNdmiU.G41.U3geU1HBCXRNF2O7xiXsSPFVv9y",
-        },*/
-      });
+      let response = await axios.post("auth/login", credentials, {});
       return dispatch("attempt", response.data.access_token);
     },
     async attempt({ commit, state }, token) {
@@ -52,7 +47,7 @@ export default {
         return;
       }
       try {
-        let response = await axios.post("auth/getInfo",{
+        let response = await axios.post("auth/getInfo", {
           /*headers: {
             Authorization: 'Bearer '+ token,
           }*/
@@ -70,7 +65,7 @@ export default {
     },
     signOut({ commit }) {
       localStorage.removeItem("token");
-      localStorage.removeItem("email");
+      //localStorage.removeItem("email");
       localStorage.removeItem("id");
       commit("SET_TOKEN", null);
       commit("SET_USER", null);

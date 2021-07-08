@@ -34,6 +34,9 @@
     </header>
     <!-- form -->
     <form class="auth-form" @submit.prevent="submit">
+      <v-alert text dense outlined dismissible v-if="hasError" type="error">
+        {{ msg }}
+      </v-alert>
       <!-- .form-group -->
       <div class="form-group">
         <div class="form-label-group">
@@ -133,6 +136,7 @@ export default {
       procesando: false,
       hasError: false,
       recaptcha: null,
+      msg: null,
       form: {
         email: "",
         password: "",
@@ -160,25 +164,14 @@ export default {
             });
           })
           .catch(() => {
-            /* this.$toast.add({
-              severity: "error",
-              detail: "Usuario y/o contraseña incorrectos.",
-              closable: false,
-              life: 5000,
-            }); */
-            alert("Error");
+            this.msg = "Usuario y/o contraseña incorrectos";
             this.procesando = false;
             this.hasError = true;
             this.form.password = null;
           });
       } else {
-        alert("El campo reCAPTCHA es obligatorio");
-        /* this.$toast.add({
-          severity: "error",
-          detail: "El campo reCAPTCHA es obligatorio",
-          closable: false,
-          life: 5000,
-        }); */
+        this.hasError = true;
+        this.msg = "El campo reCAPTCHA es obligatorio";
       }
     },
   },
